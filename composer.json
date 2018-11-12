@@ -47,5 +47,5 @@
         ]
     },
     "minimum-stability": "stable",
-    "bin": ["harbor"]
+    "bin": ["harbor", "builds/harbor"]
 }
