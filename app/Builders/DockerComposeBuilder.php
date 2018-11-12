@@ -6,13 +6,13 @@ namespace App\Builders;
 
 use Spyc;
 
-class DockerComposeBaseBuilder
+class DockerComposeBuilder
 {
     /**
      * @var array
      */
     private $contents = [
-        'version' => 2,
+        'version' => '2',
         'services' => [
             'app' => [
                 'image' => 'whatdafox/php-fpm:latest',

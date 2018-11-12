@@ -2,35 +2,35 @@
 
 namespace App\Commands;
 
-use App\Builders\DockerComposeBaseBuilder;
+use App\Builders\DockerComposeBuilder;
 use LaravelZero\Framework\Commands\Command;
 use Symfony\Component\Yaml\Yaml;
 
 class Init extends Command
 {
     /**
-     * @var boolean
+     * @var string
      */
-    protected $mysql = true;
+    protected $filename = 'docker-compose.yml';
 
     /**
      * @var boolean
      */
-    protected $redis = true;
+    protected $settings = [];
 
     /**
      * The signature of the command.
      *
      * @var string
      */
-    protected $signature = 'init:laravel';
+    protected $signature = 'init';
 
     /**
      * The description of the command.
      *
      * @var string
      */
-    protected $description = 'Initialize your project to use Docker for Laravel';
+    protected $description = 'Initialize your project with docker-compose';
 
     /**
      * Execute the console command.
@@ -39,30 +39,40 @@ class Init extends Command
      */
     public function handle()
     {
-        $this->mysql = $this->confirm('Will you be using a database?', true);
-        $this->redis = $this->confirm('Will you be using a redis?', true);
+        $this->settings['mysql'] = $this->confirm('Will you be using a database?', true);
+        $this->settings['redis'] = $this->confirm('Will you be using a redis?', true);
+
+        // Is this initializing for a given environment?
+        if($this->option('env')) {
+            $this->filename = "docker-compose.{$this->option('env')}.yml";
+        }
+
+        // Does the docker-compose file already exist for the given environment?
+        if (file_exists(getcwd() . '/' . $this->filename)) {
+            $this->error('Docker already initialized for this environment!');
+        }
 
         // Generate docker-compose
-        $this->info('Generate docker-compose.base.yml...');
-        $this->generateDockerComposeBase();
+        $this->info("Generate {$this->filename}...");
+        $this->generateDockerCompose();
     }
 
     /**
      * @return void
      */
-    private function generateDockerComposeBase(): void
+    private function generateDockerCompose(): void
     {
-        $dockerComposeBase = new DockerComposeBaseBuilder();
+        $dockerCompose = new DockerComposeBuilder();
 
-        if ($this->mysql) {
-            $dockerComposeBase->includeMySQL();
+        if ($this->settings['mysql']) {
+            $dockerCompose->includeMySQL();
         }
 
-        if ($this->redis) {
-            $dockerComposeBase->includeRedis();
+        if ($this->settings['redis']) {
+            $dockerCompose->includeRedis();
         }
 
-        $this->writeFile('docker-compose.base.yml', (string) $dockerComposeBase);
+        $this->writeFile($this->filename, (string) $dockerCompose);
     }
 
     /**
