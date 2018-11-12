@@ -34,7 +34,7 @@
         }
     },
     "config": {
-        "preferred-install": "dist",
+        "preferred-install": "source",
         "sort-packages": true,
         "optimize-autoloader": true,
         "platform": {
@@ -47,5 +47,5 @@
         ]
     },
     "minimum-stability": "stable",
-    "bin": ["harbor", "builds/harbor"]
+    "bin": ["harbor"]
 }
