@@ -46,7 +46,6 @@
             "@php application app:rename"
         ]
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    "minimum-stability": "stable",
     "bin": ["harbor"]
 }

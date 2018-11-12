@@ -2,6 +2,12 @@
 
 Command-line tool to help dockerize Laravel.
 
+## Installation
+
+```bash
+$ composer global require whatdafox/harbor
+```
+
 ## Roadmap
 
 - [ ] Add support for running composer commands on container
