@@ -14,13 +14,25 @@ class DockerComposeBuilder
     private $contents = [
         'version' => '2',
         'services' => [
+            'nginx' => [
+                'image' => 'whatdafox/nginx-php:latest',
+                'volumes' => [
+                    '.:/var/www/html',
+                ],
+                'ports' => [
+                    '${APP_PORT}:80',
+                ],
+                'networks' => [
+                    'app-net',
+                ],
+            ],
             'app' => [
                 'image' => 'whatdafox/php-fpm:latest',
                 'volumes' => [
                     '.:/var/www/html',
                 ],
-                'ports' => [
-                    '${APP_PORT}:80'
+                'env-file' => [
+                    '.env'
                 ],
                 'networks' => [
                     'app-net',
