@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'production' => env('APP_PRODUCTION', true),
+    'production' => env('PRODUCTION', true),
 
     /*
     |--------------------------------------------------------------------------
