@@ -3,8 +3,10 @@
 namespace App\Commands;
 
 use LaravelZero\Framework\Commands\Command;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
-class Up extends Command
+class ListContainers extends Command
 {
     /**
      * @var string
@@ -16,14 +18,14 @@ class Up extends Command
      *
      * @var string
      */
-    protected $signature = 'up';
+    protected $signature = 'ps';
 
     /**
      * The description of the command.
      *
      * @var string
      */
-    protected $description = 'Launch your docker containers';
+    protected $description = 'List your docker containers';
 
     /**
      * Execute the console command.
@@ -41,6 +43,8 @@ class Up extends Command
             die;
         }
 
-        exec("docker-compose -f {$this->filename} up -d");
+        $output = [];
+        exec("docker-compose -f {$this->filename} ps", $output);
+        $this->output->listing($output);
     }
 }

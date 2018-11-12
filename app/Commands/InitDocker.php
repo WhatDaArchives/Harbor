@@ -6,7 +6,7 @@ use App\Builders\DockerComposeBuilder;
 use LaravelZero\Framework\Commands\Command;
 use Symfony\Component\Yaml\Yaml;
 
-class Init extends Command
+class InitDocker extends Command
 {
     /**
      * @var string
@@ -23,7 +23,7 @@ class Init extends Command
      *
      * @var string
      */
-    protected $signature = 'init';
+    protected $signature = 'init {--force : Force initialization}';
 
     /**
      * The description of the command.
@@ -39,18 +39,19 @@ class Init extends Command
      */
     public function handle()
     {
-        $this->settings['mysql'] = $this->confirm('Will you be using a database?', true);
-        $this->settings['redis'] = $this->confirm('Will you be using a redis?', true);
+        // Does the docker-compose file already exist for the given environment?
+        if (file_exists(getcwd() . '/' . $this->filename) && !$this->option('force')) {
+            $this->error('Docker already initialized for this environment!');
+            die;
+        }
 
         // Is this initializing for a given environment?
-        if($this->option('env')) {
+        if ($this->option('env')) {
             $this->filename = "docker-compose.{$this->option('env')}.yml";
         }
 
-        // Does the docker-compose file already exist for the given environment?
-        if (file_exists(getcwd() . '/' . $this->filename)) {
-            $this->error('Docker already initialized for this environment!');
-        }
+        $this->settings['mysql'] = $this->confirm('Will you be using a database?', true);
+        $this->settings['redis'] = $this->confirm('Will you be using a redis?', true);
 
         // Generate docker-compose
         $this->info("Generate {$this->filename}...");
@@ -72,7 +73,7 @@ class Init extends Command
             $dockerCompose->includeRedis();
         }
 
-        $this->writeFile($this->filename, (string) $dockerCompose);
+        $this->writeFile($this->filename, (string)$dockerCompose);
     }
 
     /**

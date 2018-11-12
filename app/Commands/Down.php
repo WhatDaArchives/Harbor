@@ -4,7 +4,7 @@ namespace App\Commands;
 
 use LaravelZero\Framework\Commands\Command;
 
-class Up extends Command
+class Down extends Command
 {
     /**
      * @var string
@@ -16,14 +16,14 @@ class Up extends Command
      *
      * @var string
      */
-    protected $signature = 'up';
+    protected $signature = 'down';
 
     /**
      * The description of the command.
      *
      * @var string
      */
-    protected $description = 'Launch your docker containers';
+    protected $description = 'Shut down your docker containers';
 
     /**
      * Execute the console command.
@@ -41,6 +41,6 @@ class Up extends Command
             die;
         }
 
-        exec("docker-compose -f {$this->filename} up -d");
+        exec("docker-compose -f {$this->filename} down");
     }
 }

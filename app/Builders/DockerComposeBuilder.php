@@ -12,7 +12,7 @@ class DockerComposeBuilder
      * @var array
      */
     private $contents = [
-        'version' => '2',
+        'version' => '3',
         'services' => [
             'nginx' => [
                 'image' => 'whatdafox/nginx-php:latest',
@@ -20,7 +20,7 @@ class DockerComposeBuilder
                     '.:/var/www/html',
                 ],
                 'ports' => [
-                    '${APP_PORT}:80',
+                    '${APP_PORT:-80}:80',
                 ],
                 'networks' => [
                     'app-net',
@@ -31,8 +31,8 @@ class DockerComposeBuilder
                 'volumes' => [
                     '.:/var/www/html',
                 ],
-                'env-file' => [
-                    '.env'
+                'env_file' => [
+                    '.env',
                 ],
                 'networks' => [
                     'app-net',
@@ -41,7 +41,7 @@ class DockerComposeBuilder
         ],
         'networks' => [
             'app-net' => [
-                'driver' => 'local',
+                'driver' => 'bridge',
             ],
         ],
         'volumes' => [
@@ -51,7 +51,7 @@ class DockerComposeBuilder
             'redisdata' => [
                 'driver' => 'local',
             ],
-        ]
+        ],
     ];
 
     /**
@@ -65,7 +65,7 @@ class DockerComposeBuilder
                 'mysqldata:/var/lib/mysql',
             ],
             'ports' => [
-                '${DB_PORT}:3306'
+                '${DB_PORT:-3306}:3306',
             ],
             'networks' => [
                 'app-net',
@@ -84,6 +84,9 @@ class DockerComposeBuilder
             'image' => 'redis:latest',
             'volumes' => [
                 'redisdata:/data',
+            ],
+            'ports' => [
+                '${REDIS_PORT:-6379}:6379',
             ],
             'networks' => [
                 'app-net',
