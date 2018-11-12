@@ -1,8 +1,6 @@
 # Harbor
 
-Command-line tool to help dockerize Laravel.
-
-Build using [Laravel Zero](https://github.com/laravel-zero/laravel-zero)
+Command-line tool to help dockerize Laravel. Built using [Laravel Zero](https://github.com/laravel-zero/laravel-zero).
 
 ## Installation
 
