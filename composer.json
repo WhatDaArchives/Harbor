@@ -2,7 +2,7 @@
     "name": "whatdafox/harbor",
     "description": "Command-line tool to dockerize Laravel.",
     "keywords": ["laravel", "docker", "console", "cli"],
-    "type": "project",
+    "type": "library",
     "license": "MIT",
     "support": {
         "issues": "https://github.com/whatdafox/harbor/issues",
