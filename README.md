@@ -8,6 +8,38 @@ Command-line tool to help dockerize Laravel.
 $ composer global require whatdafox/harbor
 ```
 
+## Usage
+
+Create a new Laravel application (using the [Laravel Installer](https://laravel.com/docs/5.7/installation#installing-laravel)):
+
+```bash
+$ laravel new MyApplication
+```
+
+Initialize Harbor:
+
+```bash
+$ harbor init
+```
+
+Boot your containers:
+
+```bash
+$ harbor up
+```
+
+To shut down the container, run:
+
+```bash
+$ harbor down
+```
+
+To see all running containers, run:
+
+```bash
+$ harbor ps
+```
+
 ## Roadmap
 
 - [ ] Add support for running composer commands on container
