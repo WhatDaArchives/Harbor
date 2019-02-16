@@ -3,10 +3,8 @@
 namespace App\Commands;
 
 use LaravelZero\Framework\Commands\Command;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
 
-class ListContainers extends Command
+class Run extends Command
 {
     /**
      * @var string
@@ -18,14 +16,22 @@ class ListContainers extends Command
      *
      * @var string
      */
-    protected $signature = 'ps';
+    protected $name = 'run';
 
     /**
      * The description of the command.
      *
      * @var string
      */
-    protected $description = 'List your docker containers';
+    protected $description = 'Run any commands on a ephemeral test container.';
+
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->ignoreValidationErrors();
+    }
+
 
     /**
      * Execute the console command.
@@ -43,9 +49,10 @@ class ListContainers extends Command
             die;
         }
 
+        $command = $this->input->__toString();
         $output = [];
 
-        exec("docker-compose -f {$this->filename} ps", $output);
+        exec("docker-compose -f {$this->filename} run --rm -w /var/www/html test {$command}", $output);
 
         $this->getOutput()->write(implode("\n", $output));
     }
