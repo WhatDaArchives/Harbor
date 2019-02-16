@@ -18,8 +18,8 @@ class DockerComposeBuilder
                     '.:/var/www/html:delegated',
                 ],
                 'ports' => [
-                    '${APP_PORT}:80',
-                    '${APP_SSL_PORT}:443',
+                    '${APP_PORT:-80}:80',
+                    '${APP_SSL_PORT:-443}:443',
                 ],
                 'networks' => [
                     'app-net',
@@ -72,10 +72,10 @@ class DockerComposeBuilder
             ],
             'restart' => 'on-failure',
             'environment' => [
-                'MYSQL_ROOT_PASSWORD' => "\${DB_ROOT_PASS}",
-                'MYSQL_DATABASE' => "\${DB_DATABASE}",
-                'MYSQL_USER' => "\${DB_USERNAME}",
-                'MYSQL_PASSWORD' => "\${DB_PASSWORD}",
+                'MYSQL_ROOT_PASSWORD' => "\${DB_ROOT_PASS:-secret}",
+                'MYSQL_DATABASE' => "\${DB_DATABASE:-harbor}",
+                'MYSQL_USER' => "\${DB_USERNAME:-harbor}",
+                'MYSQL_PASSWORD' => "\${DB_PASSWORD:-secret}",
             ]
         ];
 
@@ -99,7 +99,7 @@ class DockerComposeBuilder
                 '${REDIS_PORT:-6379}:6379',
             ],
             'environment' => [
-                'REDIS_PORT' => '${REDIS_PORT}:6379',
+                'REDIS_PORT' => '${REDIS_PORT:-6379}:6379',
             ],
             'networks' => [
                 'app-net',

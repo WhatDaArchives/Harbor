@@ -41,6 +41,6 @@ class Up extends Command
             die;
         }
 
-        exec("docker-compose -f {$this->filename} up -d");
+        exec("docker-compose -f {$this->filename} up -d --scale test=0");
     }
 }
