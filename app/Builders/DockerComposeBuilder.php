@@ -120,6 +120,5 @@ class DockerComposeBuilder
         }
 
         array_push($this->contents['services']['app']['depends_on'], $dependency);
-        array_push($this->contents['services']['test']['depends_on'], $dependency);
     }
 }
