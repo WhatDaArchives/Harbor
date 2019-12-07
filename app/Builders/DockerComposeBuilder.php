@@ -119,10 +119,6 @@ class DockerComposeBuilder
             $this->contents['services']['app']['depends_on'] = [];
         }
 
-        if (!array_key_exists('depends_on', $this->contents['services']['test'])) {
-            $this->contents['services']['test']['depends_on'] = [];
-        }
-
         array_push($this->contents['services']['app']['depends_on'], $dependency);
         array_push($this->contents['services']['test']['depends_on'], $dependency);
     }
