@@ -13,7 +13,7 @@ class DockerComposeBuilder
         'version' => '3',
         'services' => [
             'app' => [
-                'image' => 'webdevops/php-nginx:7.3',
+                'image' => 'webdevops/php-nginx:7.4',
                 'volumes' => [
                     '.:/var/www/html:delegated',
                 ],
@@ -28,15 +28,6 @@ class DockerComposeBuilder
                     'WEB_DOCUMENT_ROOT' => '/var/www/html/public',
                 ],
                 'restart' => 'on-failure'
-            ],
-            'test' => [
-                'image' => 'webdevops/php:7.3',
-                'volumes' => [
-                    '.:/var/www/html'
-                ],
-                'networks' => [
-                    'app-net',
-                ]
             ]
         ],
         'networks' => [

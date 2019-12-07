@@ -27,6 +27,12 @@ class ListContainers extends Command
      */
     protected $description = 'List your docker containers';
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->ignoreValidationErrors();
+    }
+
     /**
      * Execute the console command.
      *
@@ -43,10 +49,24 @@ class ListContainers extends Command
             die;
         }
 
-        $output = [];
+        $arguments = explode(' ', $this->input->__toString());
 
-        exec("docker-compose -f {$this->filename} ps", $output);
+        array_shift($arguments);
 
-        $this->getOutput()->write(implode("\n", $output));
+        $this->info('Listing container...');
+
+        $process = app('App\Process', [
+            'docker-compose',
+            '-f',
+            $this->filename,
+            'ps',
+            ...$arguments
+        ]);
+
+        $exitCode = $process->run(function ($type, $buffer) {
+            $this->output->write($buffer);
+        });
+
+        return $exitCode;
     }
 }

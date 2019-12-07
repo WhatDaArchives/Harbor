@@ -5,3 +5,4 @@
 /.vagrant
 docker-compose.yml
 docker-compose.*.yml
+.phpunit.result.cache

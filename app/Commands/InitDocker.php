@@ -55,6 +55,8 @@ class InitDocker extends Command
         // Generate docker-compose
         $this->info("Generate {$this->filename}...");
         $this->generateDockerCompose();
+
+        $this->info('Harbor initialized!');
     }
 
     /**

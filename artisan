@@ -1,0 +1,7 @@
+#!/usr/bin/env php
+<?php
+
+echo "Simulating artisan...\n";
+
+
+exit(0);

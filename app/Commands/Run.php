@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use LaravelZero\Framework\Commands\Command;
+use Symfony\Component\Process\Process;
 
 class Run extends Command
 {
@@ -46,14 +47,34 @@ class Run extends Command
 
         if (!file_exists(getcwd() . '/' . $this->filename)) {
             $this->error("{$this->filename} does not exist!");
-            die;
+            return 1;
         }
 
-        $command = $this->input->__toString();
-        $output = [];
+        $arguments = explode(' ', $this->input->__toString());
 
-        exec("docker-compose -f {$this->filename} run --rm -w /var/www/html test {$command}", $output);
+        array_shift($arguments);
 
-        $this->getOutput()->write(implode("\n", $output));
+        $this->info("Running command...");
+
+        $process = app('App\Process', [
+            'docker-compose',
+            '-f',
+            $this->filename,
+            'run',
+            '--rm',
+            '-w',
+            '/var/www/html',
+            'app',
+            ...$arguments
+        ]);
+
+        $process->setTty(Process::isTtySupported());
+
+        $exitCode = $process->run(function ($type, $buffer) {
+            $this->output->write($buffer);
+        });
+
+        $this->info('Command executed.');
+        return $exitCode;
     }
 }

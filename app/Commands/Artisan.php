@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use LaravelZero\Framework\Commands\Command;
 use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Process\Process;
 
 class Artisan extends Command
 {
@@ -47,14 +48,32 @@ class Artisan extends Command
 
         if (!file_exists(getcwd() . '/' . $this->filename)) {
             $this->error("{$this->filename} does not exist!");
-            die;
+            return 1;
         }
 
-        $command = $this->input->__toString();
-        $output = [];
+        $arguments = explode(' ', $this->input->__toString());
 
-        exec("docker-compose -f {$this->filename} run --rm -w /var/www/html test php {$command}", $output);
+        $this->info("Running artisan...");
 
-        $this->getOutput()->write(implode("\n", $output));
+        $process = app('App\Process', [
+            'docker-compose',
+            '-f',
+            $this->filename,
+            'run',
+            '--rm',
+            '-w',
+            '/var/www/html',
+            'app',
+            'php',
+            ...$arguments
+        ]);
+
+        $process->setTty(Process::isTtySupported());
+
+        $process->run(function ($type, $buffer) {
+            $this->output->write($buffer);
+        });
+
+        $this->info('Artisan executed.');
     }
 }
